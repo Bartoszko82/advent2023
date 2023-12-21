@@ -1,28 +1,27 @@
 package advent;
 
-import static org.junit.Assert.*;
-
 import org.junit.Assert;
 import org.junit.Before;
 
-import java.util.stream.Stream;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
 
-public class ChallengeOneTest {
+public class ChallengeDayOneTest {
 
 	
-	ChallengeOne challenge;
+	ChallengeDayOne challenge;
 	
 	@Before
 	public void setUp() {
-		challenge = new ChallengeOne(new InputReader());
+		challenge = new ChallengeDayOne(new InputReader());
 	}
 	
 	
 	@Test
 	public void testSingleLine() {		
-		Stream<String> testInput = Stream.of("a5aaaa2a1aaaa");
+		List<String> testInput = Arrays.asList("a5aaaa2a1aaaa");
 		long result = challenge.sumLines(testInput);
 		Assert.assertTrue(result == 51);
 	}
@@ -30,21 +29,28 @@ public class ChallengeOneTest {
 
 	@Test
 	public void testMultipleLines() {
-		Stream<String> testInput = Stream.of("a1aaaa2", "b2bbb6bbbb5", "c2ccc");
+		List<String> testInput = Arrays.asList("a1aaaa2", "b2bbb6bbbb5", "c2ccc");
 		long result = challenge.sumLines(testInput);
 		Assert.assertTrue(result == 59);
 	}
 	
 	@Test
+	public void testExample() {
+		List<String> testInput = Arrays.asList("1abc2", "pqr3stu8vwx", "a1b2c3d4e5f","treb7uchet");
+		long result = challenge.sumLines(testInput);
+		Assert.assertTrue(result == 142);
+	}	
+	
+	@Test
 	public void testEmptyLines() {
-		Stream<String> testInput = Stream.of("");
+		List<String> testInput = Arrays.asList("");
 		long result = challenge.sumLines(testInput);
 		Assert.assertTrue(result == 0);
 	}
 	
 	@Test
 	public void testNoLines() {
-		Stream<String> testInput = null;
+		List<String> testInput = null;
 		long result = challenge.sumLines(testInput);
 		Assert.assertTrue(result == 0);
 	}

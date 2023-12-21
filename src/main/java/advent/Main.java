@@ -6,11 +6,8 @@ public class Main {
 	
 	public static void main(String[] args) throws IOException {
 		
-		ChallengeOne one = new ChallengeOne(new InputReader());
+		ChallengeDayOne one = new ChallengeDayOne(new InputReader());
 		long resultOne = one.solveChallenge();
 		System.out.print("ChallengeOne result: " + resultOne);
-		
-		
 	}
-
 }
