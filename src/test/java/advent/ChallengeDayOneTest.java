@@ -42,6 +42,13 @@ public class ChallengeDayOneTest {
 	}	
 	
 	@Test
+	public void testSecondExample() {
+		List<String> testInput = Arrays.asList("two1nine", "eightwothree", "abcone2threexyz","xtwone3four","4nineeightseven2", "zoneight234","7pqrstsixteen");
+		long result = challenge.sumLines(testInput);
+		Assert.assertTrue(result == 281);
+	}	
+	
+	@Test
 	public void testEmptyLines() {
 		List<String> testInput = Arrays.asList("");
 		long result = challenge.sumLines(testInput);
