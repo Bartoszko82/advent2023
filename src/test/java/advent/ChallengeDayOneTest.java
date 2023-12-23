@@ -20,13 +20,19 @@ public class ChallengeDayOneTest {
 	
 	
 	@Test
-	public void testSingleLine() {		
-		List<String> testInput = Arrays.asList("a5aaaa2a1aaaa");
+	public void testSimpleLine() {		
+		List<String> testInput = Arrays.asList("a5aa1aa2a1aaaa");
 		long result = challenge.sumLines(testInput);
 		Assert.assertTrue(result == 51);
 	}
 
-
+	@Test
+	public void testComplicatedLine() {		
+		List<String> testInput = Arrays.asList("ddgjgcrssevensix37twooneightgt");
+		long result = challenge.sumLines(testInput);
+		Assert.assertTrue(result == 78);
+	}
+	
 	@Test
 	public void testMultipleLines() {
 		List<String> testInput = Arrays.asList("a1aaaa2", "b2bbb6bbbb5", "c2ccc");
