@@ -18,18 +18,18 @@ public class ChallengeDayOne {
 
 	private final InputReader inputReader;
 	
-	private final List<String> enumPatterns = convertEnumPatterns();
+	private final List<String> enumPatterns = convertEnumToPatterns();
 	
-	private final Function<String, String> getLineCalibrationValue = line -> {		
+	private final Function<String, Integer> getLineCalibrationValue = line -> {		
 		Map<Integer, String> digitsMap = findAllDigitsInLine(line);
-		Set<Integer> keySet = digitsMap.keySet();
-		if (keySet.isEmpty()) {
-			return "0";
+		if (digitsMap.isEmpty()) {
+			return 0;
 		}
+		
+		Set<Integer> keySet = digitsMap.keySet();
 		int minIndex = Collections.min(keySet);
 		int maxIndex = Collections.max(keySet);
-		
-		return digitsMap.get(minIndex) + digitsMap.get(maxIndex);
+		return Integer.valueOf(digitsMap.get(minIndex) + digitsMap.get(maxIndex));
 	};
 	
 	private enum Digit {
@@ -54,11 +54,10 @@ public class ChallengeDayOne {
 	
 		return lines.stream()
 				.map(getLineCalibrationValue::apply)
-				.map(Integer::valueOf)
 				.reduce(0, Integer::sum);
 	}
 	
-	private List<String> convertEnumPatterns() {
+	private List<String> convertEnumToPatterns() {
 		List<String> values = new ArrayList<>();
 		for (Digit digit : Digit.values()) {
 			values.add(digit.name().toLowerCase());
