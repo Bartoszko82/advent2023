@@ -3,7 +3,9 @@ package advent;
 import org.junit.Assert;
 import org.junit.Before;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
@@ -21,41 +23,43 @@ public class ChallengeDayTwoTest {
 		challenge = new ChallengeDayTwo();
 	}
 	
-//	@Test
-//	public void testExample() {
-//		List<String> testInput = Arrays.asList("Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green",
-//				"Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue",
-//				"Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red",
-//				"Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red",
-//				"Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green");
-//		long result = challenge.solveChallenge(testInput);
-//		Assert.assertTrue(result == 8);
-//	}	
-//	
-//
-//	@Test
-//	public void testFindingValidLines() {
-//		List<String> validLines = Arrays.asList("Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green",
-//				"Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue",
-//				"Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red",
-//				"Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red",
-//				"Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green");
-//		
-//		List<String> invalidLines = Arrays.asList("Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green",
-//				"Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue",
-//				"Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red",
-//				"Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red",
-//				"Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green");
-//		
-//		List<String> testInput = new ArrayList<>();
-//		testInput.addAll(validLines);
-//		testInput.addAll(invalidLines);
-//		
-//		List<String> result = challenge.findValidLines(testInput);
-//		Assert.assertTrue(result.equals(validLines));
-//	}	
-//
-//	
+	@Test
+	public void testExample() {
+		List<String> testInput = Arrays.asList("Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green",
+				"Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue",
+				"Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red",
+				"Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red",
+				"Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green");
+		long result = challenge.solveChallenge(testInput, "12 red, 13 green, 14 blue");
+		System.out.print(result);
+		Assert.assertTrue(result == 8);
+	}	
+	
+	@Test
+	public void testFindingValidLines() {
+		Game game1 = challenge.createGame("Game 1", Arrays.asList("2 red, 1 green, 1 blue", "2 green, 1 blue"));
+		Game game2 = challenge.createGame("Game 2", Arrays.asList("2 red, 5 green, 1 blue", "2 green, 2 blue"));
+		Game game3 = challenge.createGame("Game 3", Collections.emptyList());
+	
+		List<Game> validGames = new ArrayList<>();
+		validGames.add(game1);
+		
+		List<Game> invalidGames = new ArrayList<>();
+		invalidGames.add(game2);
+		invalidGames.add(game3);
+		
+		List<Game> testInput = new ArrayList<>();
+		testInput.addAll(validGames);
+		testInput.addAll(invalidGames);
+		
+		Subset referenceBag = challenge.createSubset("2 red, 3 green, 2 blue");
+		
+		List<Game> result = challenge.validateGames(testInput, referenceBag);
+		Assert.assertTrue(result.size() == 1);
+		Game gameR = result.get(0);
+		Assert.assertTrue(gameR.getId() == 1);
+	}	
+
 	@Test
 	public void testSumValidLines() {
 		List<Game> testInput = Arrays.asList(challenge.createGame(1), challenge.createGame(15), challenge.createGame(29));

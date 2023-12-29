@@ -11,12 +11,12 @@ public class ChallengeDayTwo {
 			
 	public long solveChallenge(List<String> lines, String bagContent) {		
 		Subset bag = createSubset(bagContent); 
-		List<Game> games = parseLinesToGames(lines);
+		List<Game> games = parseLines(lines);
 		List<Game> validGames = validateGames(games, bag); 
 		return sumValidLines(validGames);
 	}
 
-	private List<Game> parseLinesToGames(List<String> lines) {
+	private List<Game> parseLines(List<String> lines) {
 		List<Game> games = new ArrayList<>();
 		for (String line : lines) {
 			String[] array = line.split(":"); //TODO rename
@@ -55,7 +55,7 @@ public class ChallengeDayTwo {
 		int blue = 0;
 		
 		for (String cube : cubes) {
-			if (cube.contains(" 1 red")) {
+			if (cube.contains("red")) {
 				String trim = cube.replace("red", "").trim();
 				red = Integer.valueOf(trim);
 			}
@@ -75,13 +75,37 @@ public class ChallengeDayTwo {
 	
 	
 	protected long sumValidLines(List<Game> validGames) {
-		return validGames.stream().map(Game::getId).reduce(0,Integer::sum);
+		return validGames.stream().
+				map(Game::getId).
+				reduce(0,Integer::sum);
 	}
 
 	protected List<Game> validateGames(List<Game> games, Subset bag) {
-		return games;
-		
+		List<Game> validGames = new ArrayList<>();		
+		for (Game game : games) {
+			boolean subsetsValid = true;
+			if (game.getSubsets().isEmpty()) {
+				subsetsValid = false;
+			}
+			for (Subset subset : game.getSubsets()) {
+				boolean impossibleSubset = bag.getRed() < subset.getRed() || bag.getGreen() < subset.getGreen() || bag.getBlue() < subset.getBlue();
+				if (impossibleSubset) {
+					subsetsValid = false;
+				}
+			}
+			if (subsetsValid) {
+				validGames.add(game);
+			}
+		}
+		return validGames;
 	}	
+	
+	public Game createGame(String gameString, List<String> subsets) {
+		Game game = parseGame(gameString);
+		List<Subset> parseSubsets = parseSubsets(subsets);
+		game.setSubsets(parseSubsets);
+		return game;
+	}
 	
 	public Game createGame(int id) {
 		return new Game(id);

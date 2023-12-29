@@ -11,12 +11,12 @@ public class Main {
 		
 		ChallengeDayOne one = new ChallengeDayOne(new InputReader());
 		long resultOne = one.solveChallenge();
-		System.out.print("ChallengeOne result: " + resultOne);
+		System.out.println("ChallengeOne result: " + resultOne);
 		
 		List<String> challengeTwoInput = inputReader.readInput("src/main/resources/ChallengeDayTwoInput");
 		ChallengeDayTwo two = new ChallengeDayTwo();
 		String bagContent = "12 red, 13 green, 14 blue";
-		
-		two.solveChallenge(challengeTwoInput, bagContent);
+		long resultTwo = two.solveChallenge(challengeTwoInput, bagContent);
+		System.out.println("ChallengeTwo result: " + resultTwo);
 	}
 }
