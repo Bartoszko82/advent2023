@@ -18,5 +18,9 @@ public class Main {
 		String bagContent = "12 red, 13 green, 14 blue";
 		long resultTwo = two.solveChallenge(challengeTwoInput, bagContent);
 		System.out.println("ChallengeTwo result: " + resultTwo);
+		
+		long resultTwoPartTwo = two.solveChallengePartTwo(challengeTwoInput);
+		System.out.println("ChallengeTwoPartTwo result: " + resultTwoPartTwo);
+
 	}
 }

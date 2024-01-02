@@ -36,6 +36,18 @@ public class ChallengeDayTwoTest {
 	}	
 	
 	@Test
+	public void testExamplePartTwo() {
+		List<String> testInput = Arrays.asList("Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green",
+				"Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue",
+				"Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red",
+				"Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red",
+				"Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green");
+		long result = challenge.solveChallengePartTwo(testInput);
+		System.out.print(result);
+		Assert.assertTrue(result == 2286);
+	}
+		
+	@Test
 	public void testFindingValidLines() {
 		Game game1 = challenge.createGame("Game 1", Arrays.asList("2 red, 1 green, 1 blue", "2 green, 1 blue"));
 		Game game2 = challenge.createGame("Game 2", Arrays.asList("2 red, 5 green, 1 blue", "2 green, 2 blue"));
@@ -59,6 +71,19 @@ public class ChallengeDayTwoTest {
 		Game gameR = result.get(0);
 		Assert.assertTrue(gameR.getId() == 1);
 	}	
+	
+	
+	
+	@Test
+	public void testGetMinimalCubes() {
+		Game game1 = challenge.createGame("Game 1", Arrays.asList("5 red, 1 green, 1 blue", "2 green, 1 blue", "3 red, 1 green, 6 blue"));
+		List<Game> testInput = Arrays.asList(game1);
+		List<Subset> cubesSets = challenge.getMinimalCubes(testInput);
+		Subset result = cubesSets.get(0);
+		Assert.assertTrue(result.getRed() == 5);
+		Assert.assertTrue(result.getGreen() == 2);
+		Assert.assertTrue(result.getBlue() == 6);
+	}	
 
 	@Test
 	public void testSumValidLines() {
@@ -66,6 +91,14 @@ public class ChallengeDayTwoTest {
 		long result = challenge.sumValidLines(testInput);
 		Assert.assertTrue(result == 45);
 	}	
+	
+	@Test
+	public void sumPowerOfCubesSets() {
+		List<Subset> testCubesSets = Arrays.asList(challenge.createSubset("3 green, 4 blue, 1 red"));
+		long result = challenge.sumPowerOfCubesSets(testCubesSets);
+		Assert.assertTrue(result == 12);
+	}	
+	
 	
 	@Test
 	public void testParsingGame() {

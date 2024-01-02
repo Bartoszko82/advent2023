@@ -16,6 +16,43 @@ public class ChallengeDayTwo {
 		return sumValidLines(validGames);
 	}
 
+	public long solveChallengePartTwo(List<String> lines) {		
+		List<Game> games = parseLines(lines);
+		List<Subset> minimalCubes = getMinimalCubes(games); 
+		return sumPowerOfCubesSets(minimalCubes);
+	}
+	
+	protected List<Subset> getMinimalCubes(List<Game> games) {
+		List<Subset> subsets = new ArrayList<>();
+			for (Game game : games) {
+				subsets.add(getMinCubesNumbers(game.getSubsets()));
+			}
+		return subsets;
+	}
+	
+	private Subset getMinCubesNumbers(List<Subset> subsets) {
+		int minRed = 0;
+		int minGreen = 0;
+		int minBlue = 0;
+		for (Subset subset : subsets) {
+			int red = subset.getRed();
+			minRed = red > minRed ? red : minRed;
+			int green = subset.getGreen();
+			minGreen = green > minGreen ? green : minGreen;
+			int blue = subset.getBlue();
+			minBlue = blue > minBlue ? blue : minBlue;
+		}
+		return new Subset(minRed,minGreen,minBlue);
+	}
+	
+	
+	protected long sumPowerOfCubesSets(List<Subset> minimalCubes) {
+		return minimalCubes.stream().
+				map(subset -> subset.getRed() * subset.getGreen() * subset.getBlue()).
+				reduce(0,Integer::sum);	
+		
+	}
+	
 	private List<Game> parseLines(List<String> lines) {
 		List<Game> games = new ArrayList<>();
 		for (String line : lines) {
@@ -50,9 +87,11 @@ public class ChallengeDayTwo {
 		
 	protected Subset createSubset(String string) {
 		List<String> cubes = new ArrayList<String>(Arrays.asList(string.split(",")));
+
 		int red = 0;
 		int green = 0;
 		int blue = 0;
+		
 		
 		for (String cube : cubes) {
 			if (cube.contains("red")) {
@@ -99,7 +138,7 @@ public class ChallengeDayTwo {
 		}
 		return validGames;
 	}	
-	
+		
 	public Game createGame(String gameString, List<String> subsets) {
 		Game game = parseGame(gameString);
 		List<Subset> parseSubsets = parseSubsets(subsets);
