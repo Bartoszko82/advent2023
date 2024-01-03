@@ -10,39 +10,35 @@ import java.util.List;
 
 import org.junit.Test;
 
-import advent.ChallengeDayTwo.Game;
-import advent.ChallengeDayTwo.Subset;
+import advent.DayTwoChallenge.Game;
+import advent.DayTwoChallenge.Subset;
 
-public class ChallengeDayTwoTest {
+public class DayTwoChallengeTest {
 
 	
-	ChallengeDayTwo challenge;
+	DayTwoChallenge challenge;
+	
+	List<String> testInput = Arrays.asList("Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green",
+			"Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue",
+			"Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red",
+			"Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red",
+			"Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green");
 	
 	@Before
 	public void setUp() {
-		challenge = new ChallengeDayTwo();
+		challenge = new DayTwoChallenge();
 	}
 	
 	@Test
 	public void testExample() {
-		List<String> testInput = Arrays.asList("Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green",
-				"Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue",
-				"Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red",
-				"Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red",
-				"Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green");
 		long result = challenge.solveChallenge(testInput, "12 red, 13 green, 14 blue");
 		System.out.print(result);
 		Assert.assertTrue(result == 8);
 	}	
 	
 	@Test
-	public void testExamplePartTwo() {
-		List<String> testInput = Arrays.asList("Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green",
-				"Game 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue",
-				"Game 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red",
-				"Game 4: 1 green, 3 red, 6 blue; 3 green, 6 red; 3 green, 15 blue, 14 red",
-				"Game 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green");
-		long result = challenge.solveChallengePartTwo(testInput);
+	public void testExampleSecondPart() {
+		long result = challenge.solveChallengeSecondPart(testInput);
 		System.out.print(result);
 		Assert.assertTrue(result == 2286);
 	}
@@ -71,8 +67,6 @@ public class ChallengeDayTwoTest {
 		Game gameR = result.get(0);
 		Assert.assertTrue(gameR.getId() == 1);
 	}	
-	
-	
 	
 	@Test
 	public void testGetMinimalCubes() {

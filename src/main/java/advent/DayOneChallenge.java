@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class ChallengeDayOne {
+public class DayOneChallenge {
 
 	private final InputReader inputReader;
 	

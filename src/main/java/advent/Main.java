@@ -9,18 +9,18 @@ public class Main {
 				
 		InputReader inputReader = new InputReader();
 		
-		ChallengeDayOne one = new ChallengeDayOne(new InputReader());
-		long resultOne = one.solveChallenge();
-		System.out.println("ChallengeOne result: " + resultOne);
+		DayOneChallenge dayOneChallenge = new DayOneChallenge(inputReader);
+		long dayOneResult = dayOneChallenge.solveChallenge();
+		System.out.println("Day one challenge result: " + dayOneResult);
 		
-		List<String> challengeTwoInput = inputReader.readInput("src/main/resources/ChallengeDayTwoInput");
-		ChallengeDayTwo two = new ChallengeDayTwo();
+		List<String> dayTwoChallengeInput = inputReader.readInput("src/main/resources/DayTwoChallengeInput");
+		DayTwoChallenge dayTwoChallenge = new DayTwoChallenge();
 		String bagContent = "12 red, 13 green, 14 blue";
-		long resultTwo = two.solveChallenge(challengeTwoInput, bagContent);
-		System.out.println("ChallengeTwo result: " + resultTwo);
+		long dayTwoResult = dayTwoChallenge.solveChallenge(dayTwoChallengeInput, bagContent);
+		System.out.println("Day two challenge result: " + dayTwoResult);
 		
-		long resultTwoPartTwo = two.solveChallengePartTwo(challengeTwoInput);
-		System.out.println("ChallengeTwoPartTwo result: " + resultTwoPartTwo);
+		long dayTwoResultSecondPart = dayTwoChallenge.solveChallengeSecondPart(dayTwoChallengeInput);
+		System.out.println("Day two challenge second part result: " + dayTwoResultSecondPart);
 
 	}
 }

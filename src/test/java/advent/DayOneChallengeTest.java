@@ -8,14 +8,14 @@ import java.util.List;
 
 import org.junit.Test;
 
-public class ChallengeDayOneTest {
+public class DayOneChallengeTest {
 
 	
-	ChallengeDayOne challenge;
+	DayOneChallenge challenge;
 	
 	@Before
 	public void setUp() {
-		challenge = new ChallengeDayOne(new InputReader());
+		challenge = new DayOneChallenge(new InputReader());
 	}
 	
 	

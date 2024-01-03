@@ -7,7 +7,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
-public class ChallengeDayTwo {	
+public class DayTwoChallenge {	
 			
 	public long solveChallenge(List<String> lines, String bagContent) {		
 		Subset bag = createSubset(bagContent); 
@@ -16,7 +16,7 @@ public class ChallengeDayTwo {
 		return sumValidLines(validGames);
 	}
 
-	public long solveChallengePartTwo(List<String> lines) {		
+	public long solveChallengeSecondPart(List<String> lines) {		
 		List<Game> games = parseLines(lines);
 		List<Subset> minimalCubes = getMinimalCubes(games); 
 		return sumPowerOfCubesSets(minimalCubes);
