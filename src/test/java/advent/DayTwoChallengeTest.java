@@ -10,8 +10,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import advent.DayTwoChallenge.Game;
-import advent.DayTwoChallenge.Subset;
+import advent.DayTwoChallenge.CubesGame;
+import advent.DayTwoChallenge.CubesSet;
 
 public class DayTwoChallengeTest {
 
@@ -45,76 +45,75 @@ public class DayTwoChallengeTest {
 		
 	@Test
 	public void testFindingValidLines() {
-		Game game1 = challenge.createGame("Game 1", Arrays.asList("2 red, 1 green, 1 blue", "2 green, 1 blue"));
-		Game game2 = challenge.createGame("Game 2", Arrays.asList("2 red, 5 green, 1 blue", "2 green, 2 blue"));
-		Game game3 = challenge.createGame("Game 3", Collections.emptyList());
+		CubesGame game1 = challenge.createCubesGame("Game 1", Arrays.asList("2 red, 1 green, 1 blue", "2 green, 1 blue"));
+		CubesGame game2 = challenge.createCubesGame("Game 2", Arrays.asList("2 red, 5 green, 1 blue", "2 green, 2 blue"));
+		CubesGame game3 = challenge.createCubesGame("Game 3", Collections.emptyList());
 	
-		List<Game> validGames = new ArrayList<>();
+		List<CubesGame> validGames = new ArrayList<>();
 		validGames.add(game1);
 		
-		List<Game> invalidGames = new ArrayList<>();
+		List<CubesGame> invalidGames = new ArrayList<>();
 		invalidGames.add(game2);
 		invalidGames.add(game3);
 		
-		List<Game> testInput = new ArrayList<>();
+		List<CubesGame> testInput = new ArrayList<>();
 		testInput.addAll(validGames);
 		testInput.addAll(invalidGames);
 		
-		Subset referenceBag = challenge.createSubset("2 red, 3 green, 2 blue");
+		CubesSet referenceBag = challenge.createCubesSet("2 red, 3 green, 2 blue");
 		
-		List<Game> result = challenge.validateGames(testInput, referenceBag);
+		List<CubesGame> result = challenge.validateCubesGames(testInput, referenceBag);
 		Assert.assertTrue(result.size() == 1);
-		Game gameR = result.get(0);
-		Assert.assertTrue(gameR.getId() == 1);
+		CubesGame cubesGame = result.get(0);
+		Assert.assertTrue(cubesGame.getId() == 1);
 	}	
 	
 	@Test
 	public void testGetMinimalCubes() {
-		Game game1 = challenge.createGame("Game 1", Arrays.asList("5 red, 1 green, 1 blue", "2 green, 1 blue", "3 red, 1 green, 6 blue"));
-		List<Game> testInput = Arrays.asList(game1);
-		List<Subset> cubesSets = challenge.getMinimalCubes(testInput);
-		Subset result = cubesSets.get(0);
-		Assert.assertTrue(result.getRed() == 5);
-		Assert.assertTrue(result.getGreen() == 2);
-		Assert.assertTrue(result.getBlue() == 6);
+		CubesGame game1 = challenge.createCubesGame("Game 1", Arrays.asList("5 red, 1 green, 1 blue", "2 green, 1 blue", "3 red, 1 green, 6 blue"));
+		List<CubesGame> testInput = Arrays.asList(game1);
+		List<CubesSet> cubesSets = challenge.getMinimalCubesSets(testInput);
+		CubesSet result = cubesSets.get(0);
+		Assert.assertTrue(result.getRedCubes() == 5);
+		Assert.assertTrue(result.getGreenCubes() == 2);
+		Assert.assertTrue(result.getBlueCubes() == 6);
 	}	
 
 	@Test
 	public void testSumValidLines() {
-		List<Game> testInput = Arrays.asList(challenge.createGame(1), challenge.createGame(15), challenge.createGame(29));
+		List<CubesGame> testInput = Arrays.asList(challenge.createCubesGame(1), challenge.createCubesGame(15), challenge.createCubesGame(29));
 		long result = challenge.sumValidLines(testInput);
 		Assert.assertTrue(result == 45);
 	}	
 	
 	@Test
 	public void sumPowerOfCubesSets() {
-		List<Subset> testCubesSets = Arrays.asList(challenge.createSubset("3 green, 4 blue, 1 red"));
+		List<CubesSet> testCubesSets = Arrays.asList(challenge.createCubesSet("3 green, 4 blue, 1 red"));
 		long result = challenge.sumPowerOfCubesSets(testCubesSets);
 		Assert.assertTrue(result == 12);
 	}	
 	
-	
 	@Test
-	public void testParsingGame() {
-		Game result1 = challenge.parseGame("Game 1");
-		Game result2 = challenge.parseGame("Game 125");
+	public void testParsingGameFromString() {
+		CubesGame result1 = challenge.parseStringToCubesGame("Game 1");
+		CubesGame result2 = challenge.parseStringToCubesGame("Game 125");
 		Assert.assertTrue(result1.getId() == 1);
 		Assert.assertTrue(result2.getId() == 125);
 	}	
 	
 	@Test
-	public void testCreatingSubset() {
-		Subset result = challenge.createSubset("3 green, 4 blue, 1 red");
-		Assert.assertTrue(result.getRed() == 1);
-		Assert.assertTrue(result.getGreen() == 3);
-		Assert.assertTrue(result.getBlue() == 4);
+	public void testCreatingCubesSetFromString() {
+		CubesSet result = challenge.createCubesSet("3 green, 4 blue, 1 red");
+		Assert.assertTrue(result.getRedCubes() == 1);
+		Assert.assertTrue(result.getGreenCubes() == 3);
+		Assert.assertTrue(result.getBlueCubes() == 4);
 	}
 	
 	@Test
-	public void testParsingSubsets() {
-		List<Subset> resultList = challenge.parseSubsets(Arrays.asList("3 green, 4 blue, 1 red", "8 green", "1 red, 5 blue, 21 green"));
-		Assert.assertTrue(resultList.get(0).getRed() == 1);
-		Assert.assertTrue(resultList.get(1).getGreen() == 8);
-		Assert.assertTrue(resultList.get(2).getBlue() == 5);
+	public void testParsingStrinsToCubesSets() {
+		List<CubesSet> resultList = challenge.parseStringsToCubeSets(Arrays.asList("3 green, 4 blue, 1 red", "8 green", "1 red, 5 blue, 21 green"));
+		Assert.assertTrue(resultList.get(0).getRedCubes() == 1);
+		Assert.assertTrue(resultList.get(1).getGreenCubes() == 8);
+		Assert.assertTrue(resultList.get(2).getBlueCubes() == 5);
 	}		
 }

@@ -10,176 +10,168 @@ import lombok.Setter;
 public class DayTwoChallenge {	
 			
 	public long solveChallenge(List<String> lines, String bagContent) {		
-		Subset bag = createSubset(bagContent); 
-		List<Game> games = parseLines(lines);
-		List<Game> validGames = validateGames(games, bag); 
+		CubesSet bag = createCubesSet(bagContent); 
+		List<CubesGame> games = parseLinesToGames(lines);
+		List<CubesGame> validGames = validateCubesGames(games, bag); 
 		return sumValidLines(validGames);
 	}
 
 	public long solveChallengeSecondPart(List<String> lines) {		
-		List<Game> games = parseLines(lines);
-		List<Subset> minimalCubes = getMinimalCubes(games); 
-		return sumPowerOfCubesSets(minimalCubes);
-	}
-	
-	protected List<Subset> getMinimalCubes(List<Game> games) {
-		List<Subset> subsets = new ArrayList<>();
-			for (Game game : games) {
-				subsets.add(getMinCubesNumbers(game.getSubsets()));
-			}
-		return subsets;
-	}
-	
-	private Subset getMinCubesNumbers(List<Subset> subsets) {
-		int minRed = 0;
-		int minGreen = 0;
-		int minBlue = 0;
-		for (Subset subset : subsets) {
-			int red = subset.getRed();
-			minRed = red > minRed ? red : minRed;
-			int green = subset.getGreen();
-			minGreen = green > minGreen ? green : minGreen;
-			int blue = subset.getBlue();
-			minBlue = blue > minBlue ? blue : minBlue;
-		}
-		return new Subset(minRed,minGreen,minBlue);
-	}
-	
-	
-	protected long sumPowerOfCubesSets(List<Subset> minimalCubes) {
-		return minimalCubes.stream().
-				map(subset -> subset.getRed() * subset.getGreen() * subset.getBlue()).
-				reduce(0,Integer::sum);	
-		
-	}
-	
-	private List<Game> parseLines(List<String> lines) {
-		List<Game> games = new ArrayList<>();
-		for (String line : lines) {
-			String[] array = line.split(":"); //TODO rename
-			String gameString = array[0];
-			Game game = parseGame(gameString);
-			String subsets = array[1];
-			List<String> subsetsList = new ArrayList<String>(Arrays.asList(subsets.split(";")));
-			List<Subset> subsets1 = parseSubsets(subsetsList);
-			
-			game.setSubsets(subsets1);
-			
-			
-			games.add(game);
-		}
-		
-		return games;
+		List<CubesGame> cubeGames = parseLinesToGames(lines);
+		List<CubesSet> minimalCubesSets = getMinimalCubesSets(cubeGames); 
+		return sumPowerOfCubesSets(minimalCubesSets);
 	}
 
-	protected Game parseGame(String string) {
-		String trim = string.replace("Game", "").trim();
-		return new Game(Integer.valueOf(trim));
-	}
-	
-	protected List<Subset> parseSubsets(List<String> list) {
-		List<Subset> subsets = new ArrayList<>();
-		for ( String s : list) {
-			subsets.add(createSubset(s));
-		}
-	return subsets;
-	}
-		
-	protected Subset createSubset(String string) {
-		List<String> cubes = new ArrayList<String>(Arrays.asList(string.split(",")));
-
-		int red = 0;
-		int green = 0;
-		int blue = 0;
-		
-		
-		for (String cube : cubes) {
-			if (cube.contains("red")) {
-				String trim = cube.replace("red", "").trim();
-				red = Integer.valueOf(trim);
+	protected List<CubesGame> validateCubesGames(List<CubesGame> cubesGames, CubesSet bag) {
+		List<CubesGame> validCubesGames = new ArrayList<>();		
+		for (CubesGame cubeGame : cubesGames) {
+			boolean cubesSetValid = true;
+			if (cubeGame.getCubesSets().isEmpty()) {
+				cubesSetValid = false;
 			}
-			
-			if (cube.contains("green")) {
-				String trim = cube.replace("green", "").trim();
-				green = Integer.valueOf(trim);
-			}
-			
-			if (cube.contains("blue")) {
-				String trim = cube.replace("blue", "").trim();
-				blue = Integer.valueOf(trim);
-			}
-		}
-		return new Subset(red, green, blue);
-	}
-	
-	
-	protected long sumValidLines(List<Game> validGames) {
-		return validGames.stream().
-				map(Game::getId).
-				reduce(0,Integer::sum);
-	}
-
-	protected List<Game> validateGames(List<Game> games, Subset bag) {
-		List<Game> validGames = new ArrayList<>();		
-		for (Game game : games) {
-			boolean subsetsValid = true;
-			if (game.getSubsets().isEmpty()) {
-				subsetsValid = false;
-			}
-			for (Subset subset : game.getSubsets()) {
-				boolean impossibleSubset = bag.getRed() < subset.getRed() || bag.getGreen() < subset.getGreen() || bag.getBlue() < subset.getBlue();
-				if (impossibleSubset) {
-					subsetsValid = false;
+			for (CubesSet cubesSet : cubeGame.getCubesSets()) {
+				boolean impossibleCubesSet = bag.getRedCubes() < cubesSet.getRedCubes() 
+						|| bag.getGreenCubes() < cubesSet.getGreenCubes() 
+						|| bag.getBlueCubes() < cubesSet.getBlueCubes();
+				if (impossibleCubesSet) {
+					cubesSetValid = false;
 				}
 			}
-			if (subsetsValid) {
-				validGames.add(game);
+			if (cubesSetValid) {
+				validCubesGames.add(cubeGame);
 			}
 		}
-		return validGames;
+		return validCubesGames;
 	}	
-		
-	public Game createGame(String gameString, List<String> subsets) {
-		Game game = parseGame(gameString);
-		List<Subset> parseSubsets = parseSubsets(subsets);
-		game.setSubsets(parseSubsets);
-		return game;
+	
+	protected long sumValidLines(List<CubesGame> validCubesGames) {
+		return validCubesGames.stream().
+				map(CubesGame::getId).
+				reduce(0,Integer::sum);
 	}
 	
-	public Game createGame(int id) {
-		return new Game(id);
+	protected List<CubesSet> getMinimalCubesSets(List<CubesGame> cubesGames) {
+		List<CubesSet> cubesSets = new ArrayList<>();
+			for (CubesGame cubesGame : cubesGames) {
+				cubesSets.add(getMinimalCubesSet(cubesGame.getCubesSets()));
+			}
+		return cubesSets;
 	}
 	
+	private CubesSet getMinimalCubesSet(List<CubesSet> cubesSets) {
+		int minRedCubes = 0;
+		int minGreenCubes = 0;
+		int minBlueCubes = 0;
+		for (CubesSet cubesSet : cubesSets) {
+			int redCubes = cubesSet.getRedCubes();
+			minRedCubes = redCubes > minRedCubes ? redCubes : minRedCubes;
+			int greenCubes = cubesSet.getGreenCubes();
+			minGreenCubes = greenCubes > minGreenCubes ? greenCubes : minGreenCubes;
+			int blueCubes = cubesSet.getBlueCubes();
+			minBlueCubes = blueCubes > minBlueCubes ? blueCubes : minBlueCubes;
+		}
+		return new CubesSet(minRedCubes, minGreenCubes, minBlueCubes);
+	}	
+	
+	protected long sumPowerOfCubesSets(List<CubesSet> minimalCubes) {
+		return minimalCubes.stream().
+				map(cubesSet -> cubesSet.getRedCubes() * cubesSet.getGreenCubes() * cubesSet.getBlueCubes()).
+				reduce(0,Integer::sum);	
+	}
+	
+	private List<CubesGame> parseLinesToGames(List<String> linesString) {
+		List<CubesGame> cubesGames = new ArrayList<>();
+		for (String line : linesString) {
+			String[] lineParts = line.split(":");
+			String gameString = lineParts[0];
+			CubesGame cubesGame = parseStringToCubesGame(gameString);
+			String cubesSetsPart = lineParts[1];
+			List<String> cubesSetsStrings = new ArrayList<String>(Arrays.asList(cubesSetsPart.split(";")));
+			List<CubesSet> cubesSets = parseStringsToCubeSets(cubesSetsStrings);
+			
+			cubesGame.setCubesSets(cubesSets);	
+			cubesGames.add(cubesGame);
+		}
+		return cubesGames;
+	}
 
-	@Getter
-	protected class Game {
+	protected CubesGame parseStringToCubesGame(String gameString) {
+		String trimmed = gameString.replace("Game", "").trim();
+		return new CubesGame(Integer.valueOf(trimmed));
+	}
+	
+	protected List<CubesSet> parseStringsToCubeSets(List<String> cubesSetsStrings) {
+		List<CubesSet> cubesSet = new ArrayList<>();
+		for ( String cubesSetString : cubesSetsStrings) {
+			cubesSet.add(createCubesSet(cubesSetString));
+		}
+	return cubesSet;
+	}
 		
-		public Game(int id) {
+	protected CubesSet createCubesSet(String cubesSetString) {
+		List<String> sets = new ArrayList<>(Arrays.asList(cubesSetString.split(",")));
+
+		int redCubes = 0;
+		int greenCubes = 0;
+		int blueCubes = 0;
+		
+		for (String set : sets) {
+			if (set.contains("red")) {
+				String trimmed = set.replace("red", "").trim();
+				redCubes = Integer.valueOf(trimmed);
+			}
+			
+			if (set.contains("green")) {
+				String trimmed = set.replace("green", "").trim();
+				greenCubes = Integer.valueOf(trimmed);
+			}
+			
+			if (set.contains("blue")) {
+				String trimmed = set.replace("blue", "").trim();
+				blueCubes = Integer.valueOf(trimmed);
+			}
+		}
+		return new CubesSet(redCubes, greenCubes, blueCubes);
+	}
+	
+	public CubesGame createCubesGame(String cubesGameString, List<String> cubesSetsStrings) {
+		CubesGame cubeGame = parseStringToCubesGame(cubesGameString);
+		List<CubesSet> cubesSets = parseStringsToCubeSets(cubesSetsStrings);
+		cubeGame.setCubesSets(cubesSets);
+		return cubeGame;
+	}
+	
+	public CubesGame createCubesGame(int id) {
+		return new CubesGame(id);
+	}
+	
+	@Getter
+	protected class CubesGame {
+		
+		public CubesGame(int id) {
 			this.id = id;
 		}
 		
 		private int id;
 	
 		@Setter
-		private List<Subset> subsets;
+		private List<CubesSet> cubesSets;
 		
 	}
 	
 	@Getter
-	protected class Subset {
+	protected class CubesSet {
 		
-		public Subset(int red, int green, int blue) {
-			this.red = red;
-			this.green = green;
-			this.blue = blue;
+		public CubesSet(int redCubes, int greenCubes, int blueCubes) {
+			this.redCubes = redCubes;
+			this.greenCubes = greenCubes;
+			this.blueCubes = blueCubes;
 		}
 		
-		private int red;
+		private int redCubes;
 		
-		private int green;
+		private int greenCubes;
 		
-		private int blue;
-		
-	}
-	
+		private int blueCubes;	
+	}	
 }
