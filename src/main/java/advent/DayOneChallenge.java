@@ -43,7 +43,7 @@ public class DayOneChallenge {
 	}
 			
 	public long solveChallenge() throws IOException {		
-		List<String> lines = inputReader.readInput("src/main/resources/ChallengeDayOneInput");
+		List<String> lines = inputReader.readInput("src/main/resources/DayOneChallengeInput");
 		return sumLines(lines);
 	}
 

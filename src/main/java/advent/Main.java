@@ -13,6 +13,8 @@ public class Main {
 		long dayOneResult = dayOneChallenge.solveChallenge();
 		System.out.println("Day one challenge result: " + dayOneResult);
 		
+		
+		
 		List<String> dayTwoChallengeInput = inputReader.readInput("src/main/resources/DayTwoChallengeInput");
 		DayTwoChallenge dayTwoChallenge = new DayTwoChallenge();
 		String bagContent = "12 red, 13 green, 14 blue";
@@ -22,5 +24,12 @@ public class Main {
 		long dayTwoResultSecondPart = dayTwoChallenge.solveChallengeSecondPart(dayTwoChallengeInput);
 		System.out.println("Day two challenge second part result: " + dayTwoResultSecondPart);
 
+		
+		
+		List<String> dayThreeChallengeInput = inputReader.readInput("src/main/resources/DayThreeChallengeInput");
+		DayThreeChallenge dayThreeChallenge = new DayThreeChallenge();
+		long dayThreeResult = dayThreeChallenge.solveChallenge(dayThreeChallengeInput);
+		System.out.println("Day three challenge result: " + dayThreeResult);
+		
 	}
 }
