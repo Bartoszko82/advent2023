@@ -15,7 +15,6 @@ import advent.DayTwoChallenge.CubesSet;
 
 public class DayTwoChallengeTest {
 
-	
 	DayTwoChallenge challenge;
 	
 	List<String> testInput = Arrays.asList("Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green",

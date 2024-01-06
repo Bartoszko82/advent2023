@@ -134,14 +134,14 @@ public class DayTwoChallenge {
 		return new CubesSet(redCubes, greenCubes, blueCubes);
 	}
 	
-	public CubesGame createCubesGame(String cubesGameString, List<String> cubesSetsStrings) {
+	protected CubesGame createCubesGame(String cubesGameString, List<String> cubesSetsStrings) {
 		CubesGame cubeGame = parseStringToCubesGame(cubesGameString);
 		List<CubesSet> cubesSets = parseStringsToCubeSets(cubesSetsStrings);
 		cubeGame.setCubesSets(cubesSets);
 		return cubeGame;
 	}
 	
-	public CubesGame createCubesGame(int id) {
+	protected CubesGame createCubesGame(int id) {
 		return new CubesGame(id);
 	}
 	
