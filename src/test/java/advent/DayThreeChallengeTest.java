@@ -1,5 +1,6 @@
 package advent;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -56,8 +57,9 @@ public class DayThreeChallengeTest {
 	public void testSumEngineParts() {
 		Element firstElement = challenge.createElement("456", false, 1, 4);
 		Element secondElement = challenge.createElement("1528", false, 1,54);
-		Map<Integer, List<Element>> engineParts = new HashMap<>();
-		engineParts.put(1, Arrays.asList(firstElement, secondElement));
+		List<Element> engineParts = new ArrayList<>();
+		engineParts.add(firstElement);
+		engineParts.add(secondElement);
 		long result = challenge.sumEngineParts(engineParts);
 		Assert.assertTrue(result == 1984);
 	}

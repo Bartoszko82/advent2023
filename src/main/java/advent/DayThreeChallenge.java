@@ -1,76 +1,56 @@
 package advent;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 public class DayThreeChallenge {
 
 	public long solveChallenge(List<String> lines) {	
-		Map<Integer, List<Element>> elements = parseElements(lines);
-		Map<Integer, List<Element>> engineParts = filterEngineParts(elements);
+		Map<Integer, List<Element>> linesOfElements = parseElements(lines);
+		List<Element> engineParts = filterEngineParts(linesOfElements);
 		return sumEngineParts(engineParts);
 	}
 	
-	protected long sumEngineParts(Map<Integer, List<Element>> engineParts) {
-		int sum = 0;
-	for (Entry<Integer, List<Element>> elements : engineParts.entrySet()) {
-		sum += elements.getValue().stream().map(e -> e.element).mapToInt(s -> Integer.valueOf(s)).sum();
-	}
-		return sum;
+//	protected long sumEngineParts(Map<Integer, List<Element>> engineParts) {
+//		int sum = 0;
+//	for (Entry<Integer, List<Element>> elements : engineParts.entrySet()) {
+//		sum += elements.getValue().stream().map(e -> e.element).mapToInt(s -> Integer.valueOf(s)).sum();
+//	}
+//		return sum;
+//	}
+
+	protected long sumEngineParts(List<Element> engineParts) {
+	return engineParts.stream()
+			.map(Element::getElement)
+			.map(Integer::valueOf)
+			.reduce(0,Integer::sum);
 	}
 	
-	protected Map<Integer, List<Element>> filterEngineParts(Map<Integer, List<Element>> elements) {
-		Map<Integer, List<Element>> parts = new HashMap<>();
+	protected List<Element> getEngineParts (TestLines testLines) {
 		
-		Set<Entry<Integer, List<Element>>> entrySet = elements.entrySet();
+		return testLines.getCurrentLine();
+	}
+	
+	protected List<Element> filterEngineParts(Map<Integer, List<Element>> linesOfElements) {
+		List<Element> listOfParts = new ArrayList<>();
+		TestLines testLines = new TestLines();
 		
-				
-		for (Entry<Integer, List<Element>> entry : entrySet) {
-				
-			parts.put(entry.getKey(), new ArrayList<>());
-			
-			List<Element> value = entry.getValue();
-			
-			for (Element el : value) {
-				
-				if (el.isEnginePart) {
-					System.out.println("el: " + el.getElement());
-					int begging = el.getStartIndex();
-					int end = el.getEndIndex();
-				
-					for (Element el2 : value) {
-						
-						if (!el2.isEnginePart) {
-							System.out.println("el2: " + el2.getElement());
-							int begging2 = el2.getStartIndex();
-							int end2 = el2.getEndIndex();
-					
-							
-							if (true) {
-							
-							List<Element> list = parts.get(entry.getKey());
-							list.add(el);
-							
-							System.out.println("adding part: " + el.getElement());
-							
-							}
-						}	
-						
-					}
-				
-				}
-			}
-		
+		for (Entry<Integer, List<Element>> lineOfElements : linesOfElements.entrySet()) {
+			List<Element> line = lineOfElements.getValue();
+			testLines.addNextLine(line);
+			List<Element> engineParts = getEngineParts(testLines); 
+			listOfParts.addAll(engineParts);
 		}
-		return parts;
+		return listOfParts;
 	}
 		
 	protected Map<Integer, List<Element>> parseElements(List<String> lines) {
@@ -115,8 +95,30 @@ public class DayThreeChallenge {
 		
 		int startIndex;
 		
-		int endIndex;
+		int endIndex;	
+	}
+	
+	@Getter
+	@NoArgsConstructor
+	protected class TestLines {
+
+		List<Element> previousLine;
 		
+		List<Element> currentLine;
+		
+		List<Element> nextLine;
+		
+		public TestLines (List<Element> previousLine, List<Element> currentLine, List<Element> nextLine) {
+			previousLine = previousLine != null ? previousLine : Collections.emptyList();
+			currentLine = currentLine != null ? currentLine : Collections.emptyList();
+			nextLine = nextLine != null ? nextLine : Collections.emptyList();
+		}
+		
+		public void addNextLine(List<Element> newNextLine) {
+			previousLine = currentLine;
+			currentLine = nextLine;
+			nextLine = newNextLine != null ? newNextLine : Collections.emptyList();
+		}
 	}
 	
 }
