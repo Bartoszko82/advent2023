@@ -19,6 +19,13 @@ public class DayThreeChallenge {
 		List<Element> engineParts = filterEngineParts(linesOfElements);
 		return sumEngineParts(engineParts);
 	}
+	
+	public long solveChallengeSecondPart(List<String> lines) {	
+		Map<Integer, List<Element>> linesOfElements = parseLinesToMapOfElements(lines);
+		List<Integer> gearRatios = findGearRatios(linesOfElements);
+		return gearRatios.stream().reduce(Integer::sum).orElse(0);
+	}
+	
 
 	protected Map<Integer, List<Element>> parseLinesToMapOfElements(List<String> lines) {
 		Map<Integer, List<Element>> elements = new HashMap<>();
@@ -81,9 +88,7 @@ public class DayThreeChallenge {
 		}
 		for (Element element : currentLine) {
 			if (element.isEnginePart()) {
-				int startIndex = element.getStartIndex();
-				int endIndex = element.getEndIndex();
-				boolean hasAdjacentElement = checkLines(startIndex, endIndex, testLines);
+				boolean hasAdjacentElement = checkLinesForEngineParts(element, testLines);
 				if (hasAdjacentElement) {
 					engineParts.add(element);
 				}	
@@ -92,21 +97,54 @@ public class DayThreeChallenge {
 		return engineParts;
 	}
 	
-	protected boolean checkLines(int startIndex, int endIndex, TestLines testLines) {
-		boolean adjacentSymbolPrev = checkLine(startIndex, endIndex, testLines.getPreviousLine());
-		boolean adjacentSymbolCurr = checkLine(startIndex, endIndex, testLines.getCurrentLine());
-		boolean adjacentSymbolNext = checkLine(startIndex, endIndex, testLines.getNextLine());
+	protected List<Integer> findGearRatios(Map<Integer, List<Element>> linesOfElements) {
+		List<Integer> listOfGearRatios = new ArrayList<>();
+		TestLines testLines = new TestLines(Collections.emptyList(), linesOfElements.get(0), linesOfElements.get(1));
+		for (Entry<Integer, List<Element>> lineOfElements : linesOfElements.entrySet()) {
+			List<Element> line = lineOfElements.getValue();
+			testLines.addNextLine(line);
+			List<Integer> gearRatios = getGearsRatios(testLines);
+			//TODO BZ
+			listOfGearRatios.addAll(gearRatios);
+		}		
+
+		return listOfGearRatios;
+	}
+	
+
+	protected List<Integer> getGearsRatios (TestLines testLines) {
+		List<Integer> gearRatios = new ArrayList<>();
+		List<Element> currentLine = testLines.getCurrentLine();
+		if (currentLine == null || currentLine.isEmpty()) {
+			return Collections.emptyList();
+		}
+		for (Element element : currentLine) {
+			if ("*".equals(element.getElement())) {
+				Integer gearInPrevLine = checkLineForRatioElement(element, testLines.getPreviousLine());
+				Integer gearInNextLine = checkLineForRatioElement(element, testLines.getNextLine());
+				
+				gearRatios.add(gearInPrevLine * gearInNextLine);
+			}
+		}
+		return gearRatios;
+	}
+
+	
+	protected boolean checkLinesForEngineParts(Element checkedElement, TestLines testLines) {
+		boolean adjacentSymbolPrev = checkLine(checkedElement, testLines.getPreviousLine());
+		boolean adjacentSymbolCurr = checkLine(checkedElement, testLines.getCurrentLine());
+		boolean adjacentSymbolNext = checkLine(checkedElement, testLines.getNextLine());
 		return adjacentSymbolPrev || adjacentSymbolCurr || adjacentSymbolNext;
 	}
 	
-	protected boolean checkLine(int startIndex, int endIndex, List<Element> line) {
+	protected boolean checkLine(Element checkedElement, List<Element> line) {
 		if (line.isEmpty()) {
 			return false;
 		}
 		for (Element element : line) {
 			if (!element.isEnginePart) {
 				int symbolPos = element.getStartIndex();
-				for (int i = startIndex - 1 ; i <= endIndex + 1 ; i++ ) {
+				for (int i = checkedElement.getStartIndex() - 1 ; i <= checkedElement.getEndIndex() + 1 ; i++ ) {
 					if (symbolPos == i) {
 						return true;
 					}
@@ -114,6 +152,23 @@ public class DayThreeChallenge {
 			}	
 		}	
 		return false;
+	}
+	
+	protected Integer checkLineForRatioElement(Element checkedElement, List<Element> line) {
+		if (line.isEmpty()) {
+			return 0;
+		}
+		for (Element element : line) {
+			if (element.isEnginePart) {
+				int symbolPos = checkedElement.getStartIndex();
+				for (int i = element.getStartIndex() - 1 ; i <= element.getEndIndex() + 1 ; i++ ) {
+					if (symbolPos == i) {
+						return Integer.parseInt(element.getElement());
+					}
+				}
+			}	
+		}	
+		return 0;
 	}
 	
 	protected long sumEngineParts(List<Element> engineParts) {

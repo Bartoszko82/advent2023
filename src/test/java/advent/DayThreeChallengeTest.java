@@ -90,16 +90,18 @@ public class DayThreeChallengeTest {
 		Element firstSymbol = challenge.createElement("#", false, 1, 1);
 		Element secondSymbol = challenge.createElement("@", false, 10, 10);
 		Element thirdSymbol = challenge.createElement("&", false, 6, 6);
+		Element testPart1 = challenge.createElement("123", true, 3, 5);
+		Element testPart2 = challenge.createElement("345789", true, 3, 8);
 		line.add(firstSymbol);
 		line.add(secondSymbol);
-		boolean adjacentSymbol = challenge.checkLine(3,5, line);
+		boolean adjacentSymbol = challenge.checkLine(testPart1, line);
 		Assert.assertFalse(adjacentSymbol);
 
 		line.add(thirdSymbol);
-		boolean adjacentSymbol2 = challenge.checkLine(3,5, line);
+		boolean adjacentSymbol2 = challenge.checkLine(testPart1, line);
 		Assert.assertTrue(adjacentSymbol2);
 		
-		boolean adjacentSymbol3 = challenge.checkLine(3,8, line);
+		boolean adjacentSymbol3 = challenge.checkLine(testPart2, line);
 		Assert.assertTrue(adjacentSymbol3);
 	}
 		
