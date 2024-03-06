@@ -35,7 +35,14 @@ public class DayThreeChallengeTest {
 	public void testExample() {
 		long result = challenge.solveChallenge(testInput);
 		Assert.assertTrue(result == 4361);
-	}	
+	}
+	
+	
+	@Test
+	public void testExampleSecondPart() {
+		long result = challenge.solveChallengeSecondPart(testInput);
+		Assert.assertTrue(result == 467835);
+	}
 
 	@Test
 	public void testProcessingLineWithEnginePart() {

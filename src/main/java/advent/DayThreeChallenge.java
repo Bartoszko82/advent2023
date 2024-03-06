@@ -99,7 +99,7 @@ public class DayThreeChallenge {
 	
 	protected List<Integer> findGearRatios(Map<Integer, List<Element>> linesOfElements) {
 		List<Integer> listOfGearRatios = new ArrayList<>();
-		TestLines testLines = new TestLines(Collections.emptyList(), linesOfElements.get(0), linesOfElements.get(1));
+		TestLines testLines = new TestLines(Collections.emptyList(), Collections.emptyList(), linesOfElements.get(0));
 		for (Entry<Integer, List<Element>> lineOfElements : linesOfElements.entrySet()) {
 			List<Element> line = lineOfElements.getValue();
 			testLines.addNextLine(line);
@@ -120,10 +120,15 @@ public class DayThreeChallenge {
 		}
 		for (Element element : currentLine) {
 			if ("*".equals(element.getElement())) {
-				Integer gearInPrevLine = checkLineForRatioElement(element, testLines.getPreviousLine());
-				Integer gearInNextLine = checkLineForRatioElement(element, testLines.getNextLine());
+				List<Integer> gearInPrevLine = checkLineForRatioElement(element, testLines.getPreviousLine());
+				List<Integer> gearInCurrLine = checkLineForRatioElement(element, testLines.getCurrentLine());
+				List<Integer> gearInNextLine = checkLineForRatioElement(element, testLines.getNextLine());
+				gearInPrevLine.addAll(gearInCurrLine);
+				gearInPrevLine.addAll(gearInNextLine);
 				
-				gearRatios.add(gearInPrevLine * gearInNextLine);
+				if (gearInPrevLine.size() == 2) {
+					gearRatios.add(gearInPrevLine.get(0) * gearInPrevLine.get(1));
+				} 
 			}
 		}
 		return gearRatios;
@@ -154,21 +159,22 @@ public class DayThreeChallenge {
 		return false;
 	}
 	
-	protected Integer checkLineForRatioElement(Element checkedElement, List<Element> line) {
+	protected List<Integer> checkLineForRatioElement(Element checkedElement, List<Element> line) {
+		List<Integer> list = new ArrayList<>();
 		if (line.isEmpty()) {
-			return 0;
+			return list;
 		}
 		for (Element element : line) {
 			if (element.isEnginePart) {
 				int symbolPos = checkedElement.getStartIndex();
 				for (int i = element.getStartIndex() - 1 ; i <= element.getEndIndex() + 1 ; i++ ) {
 					if (symbolPos == i) {
-						return Integer.parseInt(element.getElement());
+						list.add(Integer.parseInt(element.getElement()));
 					}
 				}
 			}	
 		}	
-		return 0;
+		return list;
 	}
 	
 	protected long sumEngineParts(List<Element> engineParts) {
