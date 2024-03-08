@@ -31,10 +31,15 @@ public class Main {
 		long dayThreeResult = dayThreeChallenge.solveChallenge(dayThreeChallengeInput);
 		System.out.println("Day three challenge result: " + dayThreeResult);
 		
-		List<String> dayThreeChallengeInputSecondPart = inputReader.readInput("src/main/resources/DayThreeChallengeInput");
-		DayThreeChallenge dayThreeChallengeSecondPart = new DayThreeChallenge();
 		long dayThreeResultSecondPart = dayThreeChallenge.solveChallengeSecondPart(dayThreeChallengeInput);
 		System.out.println("Day three challenge second part result: " + dayThreeResultSecondPart);
+		
+		
+		
+		List<String> dayFourChallengeInput = inputReader.readInput("src/main/resources/DayFourChallengeInput");
+		DayFourChallenge dayFourChallenge = new DayFourChallenge();
+		long dayFourResult = dayFourChallenge.solveChallenge(dayFourChallengeInput);
+		System.out.println("Day four challenge result: " + dayFourResult);
 		
 	}
 }
