@@ -1,5 +1,7 @@
 package advent;
 
+import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -14,114 +16,54 @@ import advent.DayThreeChallenge.Element;
 
 public class DayFourChallengeTest {
 
-	DayThreeChallenge challenge;
+	DayFourChallenge challenge;
 	
-	List<String> testInput = Arrays.asList("467..114..",
-										   "...*......",
-										   "..35..633.",
-										   "......#...",
-										   "617*......",
-										   ".....+.58.",
-										   "..592.....",
-										   "......755.",
-										   "...$.*....",
-										   ".664.598..");
+	List<String> testInput = Arrays.asList("Card 1: 41 48 83 86 17 | 83 86  6 31 17  9 48 53", 
+											"Card 2: 13 32 20 16 61 | 61 30 68 82 17 32 24 19",
+											"Card 3:  1 21 53 59 44 | 69 82 63 72 16 21 14  1",
+											"Card 4: 41 92 73 84 69 | 59 84 76 51 58  5 54 83",
+											"Card 5: 87 83 26 28 32 | 88 30 70 12 93 22 82 36",
+											"Card 6: 31 18 13 56 72 | 74 77 10 23 35 67 36 11");
 	@Before
 	public void setUp() {
-		challenge = new DayThreeChallenge();
+		challenge = new DayFourChallenge();
 	}
 	
 	@Test
-	public void testExample() {
-		long result = challenge.solveChallenge(testInput);
-		Assert.assertTrue(result == 4361);
-	}
-	
-	
-	@Test
-	public void testExampleSecondPart() {
-		long result = challenge.solveChallengeSecondPart(testInput);
-		Assert.assertTrue(result == 467835);
-	}
-
-	@Test
-	public void testProcessingLineWithEnginePart() {
-		List<Element> processedLine = challenge.processLine("..456..");
-		Element element = processedLine.get(0);
-		Assert.assertTrue(element.isEnginePart);
-		Assert.assertEquals(3, element.getStartIndex());
-		Assert.assertEquals(5, element.getEndIndex());
-		Assert.assertEquals("456", element.getElement());	
-	}
-	
-	@Test
-	public void testProcessingLineWithSymbol() {
-		List<Element> processedLine = challenge.processLine("..@..");
-		Element element = processedLine.get(0);
-		Assert.assertFalse(element.isEnginePart);
-		Assert.assertEquals(3, element.getStartIndex());
-		Assert.assertEquals(3, element.getEndIndex());
-		Assert.assertEquals("@", element.getElement());	
-	}
-	
-	@Test
-	public void testParsingLines() {
-		Map<Integer, List<Element>> parts = challenge.parseLinesToMapOfElements(Arrays.asList("..456....123....", ".12....158"));
-		Map<Integer, List<Element>> symbols = challenge.parseLinesToMapOfElements(Arrays.asList(".&....#....@"));
-		Map<Integer, List<Element>> mixed = challenge.parseLinesToMapOfElements(Arrays.asList(".&45....@"));
-		Map<Integer, List<Element>> doubles = challenge.parseLinesToMapOfElements(Arrays.asList(".45....45....@..@"));
-		Assert.assertTrue(parts.size() == 2);
-		Assert.assertTrue(parts.get(0).size() == 2 && parts.get(1).size() == 2 );
-		Assert.assertTrue(allEngineParts(parts.get(0)) && allEngineParts(parts.get(1)));		
-		Assert.assertTrue(getValuesAsStrings(parts.get(0)).equals(Arrays.asList("456","123")));
-		Assert.assertTrue(getValuesAsStrings(parts.get(1)).equals(Arrays.asList("12","158")));
-		Assert.assertTrue(symbols.get(0).size() == 3);
-		Assert.assertTrue(getValuesAsStrings(symbols.get(0)).equals(Arrays.asList("&","#","@")));
-		Assert.assertTrue(mixed.get(0).size() == 3);
-		Assert.assertTrue(getValuesAsStrings(mixed.get(0)).equals(Arrays.asList("&","45","@")));
-		Assert.assertTrue(doubles.get(0).size() == 4);
-		Assert.assertTrue(getValuesAsStrings(doubles.get(0)).equals(Arrays.asList("45","45","@","@")));
-	}
-	
-	private List<String> getValuesAsStrings (List<Element> elements) {
-		return elements.stream().map(e -> e.getElement()).collect(Collectors.toList());
-	}
- 	
-	private boolean allEngineParts(List<Element> elements) {
-		return elements.stream().allMatch(e -> e.isEnginePart);
-	}
-	
-	@Test
-	public void testCheckLine() {		
-		List<Element> line = new ArrayList<>();
-		Element firstSymbol = challenge.createElement("#", false, 1, 1);
-		Element secondSymbol = challenge.createElement("@", false, 10, 10);
-		Element thirdSymbol = challenge.createElement("&", false, 6, 6);
-		Element testPart1 = challenge.createElement("123", true, 3, 5);
-		Element testPart2 = challenge.createElement("345789", true, 3, 8);
-		line.add(firstSymbol);
-		line.add(secondSymbol);
-		boolean adjacentSymbol = challenge.checkLine(testPart1, line);
-		Assert.assertFalse(adjacentSymbol);
-
-		line.add(thirdSymbol);
-		boolean adjacentSymbol2 = challenge.checkLine(testPart1, line);
-		Assert.assertTrue(adjacentSymbol2);
+	public void testParsingCardNumber() {
+		// GIVEN
+		String example = "Card 123";
 		
-		boolean adjacentSymbol3 = challenge.checkLine(testPart2, line);
-		Assert.assertTrue(adjacentSymbol3);
-	}
+		// WHEN
+		int result = challenge.lineToCardNumber(example);
 		
-	@Test
-	public void testSumEngineParts() {
-		Element firstElement = challenge.createElement("456", true, 1, 4);
-		Element secondElement = challenge.createElement("1528", true, 2, 5);
-		List<Element> engineParts = new ArrayList<>();
-		engineParts.add(firstElement);
-		engineParts.add(secondElement);
-		long result = challenge.sumEngineParts(engineParts);
-		Assert.assertTrue(result == 1984);
+		//THEN
+		assertTrue(result == 123);
 	}
 
+	@Test
+	public void testParsingNumbers() {
+		// GIVEN
+		
+		String example = " 15 45 38 99 00";
+		
+		// WHEN
+		List<Integer> result = challenge.lineToNumbers(example);
+		
+		//THEN
+		assertTrue(result.contains(15));
+		assertTrue(result.contains(15));
+		assertTrue(result.contains(38));
+		assertTrue(result.contains(99));
+		assertTrue(result.contains(00));
+	}
 	
+	
+//	@Test
+//	public void testExample() {
+//		long result = challenge.solveChallenge(testInput);
+//		Assert.assertTrue(result == 13);
+//	}
+	
+		
 }
