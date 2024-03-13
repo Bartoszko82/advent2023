@@ -2,17 +2,12 @@ package advent;
 
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import advent.DayThreeChallenge.Element;
 
 public class DayFourChallengeTest {
 
@@ -35,7 +30,7 @@ public class DayFourChallengeTest {
 		String example = "Card 123";
 		
 		// WHEN
-		int result = challenge.lineToCardNumber(example);
+		int result = challenge.linePartToCardNumber(example);
 		
 		//THEN
 		assertTrue(result == 123);
@@ -44,26 +39,46 @@ public class DayFourChallengeTest {
 	@Test
 	public void testParsingNumbers() {
 		// GIVEN
-		
+		List<Integer> expected = Arrays.asList(15,45,38,99,00);
 		String example = " 15 45 38 99 00";
 		
 		// WHEN
-		List<Integer> result = challenge.lineToNumbers(example);
+		List<Integer> result = challenge.linePartToNumbers(example);
 		
 		//THEN
-		assertTrue(result.contains(15));
-		assertTrue(result.contains(15));
-		assertTrue(result.contains(38));
-		assertTrue(result.contains(99));
-		assertTrue(result.contains(00));
+		assertTrue(result.equals(expected));
 	}
 	
 	
-//	@Test
-//	public void testExample() {
-//		long result = challenge.solveChallenge(testInput);
-//		Assert.assertTrue(result == 13);
-//	}
+	@Test
+	public void testCalculatingScratchboardValue() {
+		// GIVEN
+		List<Integer> emptyList = Collections.emptyList();
+		List<Integer> oneElement = Arrays.asList(15);
+		List<Integer> fourElements = Arrays.asList(15,45,38,99);
+				
+				// WHEN
+				int result1 = challenge.getScratchcardValue(emptyList);
+				System.out.println(result1);
+				
+				int result2 = challenge.getScratchcardValue(oneElement);
+				System.out.println(result2);
+				
+				int result3 = challenge.getScratchcardValue(fourElements);
+				System.out.println(result3);
+				
+				//THEN
+				assertTrue(result1 == 0);
+				assertTrue(result2 == 1);
+				assertTrue(result3 == 8);
+	}
+	
+	@Test
+	public void testExample() {
+		long result = challenge.solveChallenge(testInput);
+		System.out.println(result);
+		assertTrue(result == 13);
+	}
 	
 		
 }

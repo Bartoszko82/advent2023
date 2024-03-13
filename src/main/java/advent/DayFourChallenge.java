@@ -17,33 +17,52 @@ public class DayFourChallenge {
 	
 	private static final String NUMBERS_SEPARATOR = "\\s+";
 	
-	public long solveChallenge(List<String> lines) {	
+	public int solveChallenge(List<String> lines) {	
 		Set<Scratchcard> scratchcards = parseLinesToScratchcards(lines);
-		return 1L;
+		return scratchcards.stream()
+			.map(scratchcard -> getMatchingNumbers(scratchcard))
+			.map(list -> getScratchcardValue(list))
+			.reduce(0,Integer::sum);
 	}
 	
+	protected List<Integer> getMatchingNumbers(Scratchcard scratchcard) {
+		List<Integer> winningNumbers = scratchcard.getWinningNumbers();
+		List<Integer> playerNumbers = scratchcard.getPlayerNumbers();
+		return playerNumbers.stream()
+				.filter(number -> winningNumbers.contains(number))
+				.collect(Collectors.toList());
+	}
 	
+	protected Integer getScratchcardValue(List<Integer> matchingNumbers) {
+		int x = 0;
+		for (int i = 0; i < matchingNumbers.size(); i++) {
+			x = x * 2;
+			x = Math.max(1, x);
+		}
+		return x;
+	}
 
 	protected Set<Scratchcard> parseLinesToScratchcards(List<String> lines) {
-		return lines.stream().map(line -> parseLine(line)).collect(Collectors.toSet());
-		
+		return lines.stream()
+				.map(line -> parseLine(line))
+				.collect(Collectors.toSet());
 	}
 	
 	protected Scratchcard parseLine(String line) {
 		String[] lineParts = line.split(CARD_SEPARATOR);
-		int cardNumber = lineToCardNumber(lineParts[0]);
+		int cardNumber = linePartToCardNumber(lineParts[0]);
 		String[] numberParts = lineParts[1].split(PARTS_SEPARATOR);
-		List<Integer> winningNumbers = lineToNumbers(numberParts[0]);
-		List<Integer> userNumbers = lineToNumbers(numberParts[1]);
-		return new Scratchcard (cardNumber, winningNumbers, userNumbers);
+		List<Integer> winningNumbers = linePartToNumbers(numberParts[0]);
+		List<Integer> playerNumbers = linePartToNumbers(numberParts[1]);
+		return new Scratchcard (cardNumber, winningNumbers, playerNumbers);
 	}
 	
-	protected int lineToCardNumber (String linePart) {
-		String justNumber = linePart.replace("Card", " ");
-		return Integer.valueOf(justNumber.trim());
+	protected int linePartToCardNumber (String linePart) {
+		String numberAsString = linePart.replace("Card", " ");
+		return Integer.valueOf(numberAsString.trim());
 	}
 	
-	protected List<Integer> lineToNumbers (String linePart) {
+	protected List<Integer> linePartToNumbers (String linePart) {
 		String[] numbersArray = linePart.trim().split(NUMBERS_SEPARATOR);
 		List<String> numbers = Arrays.asList(numbersArray);
 		return numbers.stream()
@@ -62,7 +81,7 @@ public class DayFourChallenge {
 		
 		List<Integer> winningNumbers;
 		
-		List<Integer> playernumbers;
+		List<Integer> playerNumbers;
 		
 	
 	}
